@@ -25,6 +25,7 @@ export default function Create({ classe }: { classe: Classe }) {
     return (
         <ClasseTheme classe={classe}>
             <AuthenticatedLayout
+                classe={classe}
                 header={
                     <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                         Ajouter un élève — {classe.nom}

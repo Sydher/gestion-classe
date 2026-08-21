@@ -6,6 +6,7 @@ use App\Http\Requests\StoreClasseRequest;
 use App\Http\Requests\UpdateClasseRequest;
 use App\Models\Classe;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -40,13 +41,21 @@ class ClasseController extends Controller
         return to_route('classes.show', $classe);
     }
 
-    public function show(Classe $classe): Response
+    public function show(Classe $classe, Request $request): Response
     {
         $this->authorize('view', $classe);
+
+        $selectedStudent = null;
+        if ($request->filled('student')) {
+            $selectedStudent = $classe->students()
+                ->with(['observations', 'communications'])
+                ->find($request->integer('student'));
+        }
 
         return Inertia::render('Classes/Show', [
             'classe' => $classe,
             'students' => $classe->students()->orderBy('nom')->get(),
+            'selectedStudent' => $selectedStudent,
         ]);
     }
 

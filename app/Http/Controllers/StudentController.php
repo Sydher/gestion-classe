@@ -25,16 +25,14 @@ class StudentController extends Controller
     {
         $student = $classe->students()->create($request->validated());
 
-        return to_route('students.show', $student);
+        return to_route('classes.show', ['classe' => $classe->id, 'student' => $student->id]);
     }
 
-    public function show(Student $student): Response
+    public function show(Student $student): RedirectResponse
     {
         $this->authorize('view', $student);
 
-        return Inertia::render('Students/Show', [
-            'student' => $student->load(['classe', 'observations', 'communications']),
-        ]);
+        return to_route('classes.show', ['classe' => $student->class_id, 'student' => $student->id]);
     }
 
     public function edit(Student $student): Response
@@ -50,7 +48,7 @@ class StudentController extends Controller
     {
         $student->update($request->validated());
 
-        return to_route('students.show', $student);
+        return to_route('classes.show', ['classe' => $student->class_id, 'student' => $student->id]);
     }
 
     public function destroy(Student $student): RedirectResponse

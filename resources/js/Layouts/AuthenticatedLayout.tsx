@@ -2,13 +2,15 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
+import { Classe } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
 export default function Authenticated({
+    classe,
     header,
     children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+}: PropsWithChildren<{ classe?: Classe; header?: ReactNode }>) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -19,24 +21,99 @@ export default function Authenticated({
             <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                </Link>
-                            </div>
+                        <div className="flex items-center">
+                            {classe ? (
+                                <>
+                                    <Link
+                                        href={route('classes.show', classe.id)}
+                                        className="flex shrink-0 items-center gap-3"
+                                    >
+                                        <div
+                                            className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-semibold text-white"
+                                            style={{
+                                                backgroundColor:
+                                                    'var(--color-primary)',
+                                            }}
+                                        >
+                                            {classe.logo_url ? (
+                                                <img
+                                                    src={classe.logo_url}
+                                                    alt=""
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            ) : (
+                                                classe.nom
+                                                    .charAt(0)
+                                                    .toUpperCase()
+                                            )}
+                                        </div>
+                                        <span className="hidden font-semibold text-gray-800 dark:text-gray-200 sm:block">
+                                            {classe.nom}
+                                        </span>
+                                    </Link>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('classes.index')}
-                                    active={route().current('classes.*')}
-                                >
-                                    Mes classes
-                                </NavLink>
-                            </div>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route(
+                                                'classes.show',
+                                                classe.id,
+                                            )}
+                                            active={
+                                                route().current(
+                                                    'classes.show',
+                                                ) || route().current(
+                                                    'students.*',
+                                                )
+                                            }
+                                        >
+                                            Élèves
+                                        </NavLink>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <Link
+                                        href="/"
+                                        className="flex shrink-0 items-center gap-3"
+                                    >
+                                        <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                        <span className="hidden font-semibold text-gray-800 dark:text-gray-200 sm:block">
+                                            Carnet de bord pédagogique
+                                        </span>
+                                    </Link>
+
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route('classes.index')}
+                                            active={route().current(
+                                                'classes.*',
+                                            )}
+                                        >
+                                            Mes classes
+                                        </NavLink>
+                                    </div>
+                                </>
+                            )}
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div className="hidden sm:ms-6 sm:flex sm:items-center sm:gap-3">
+                            {classe && (
+                                <>
+                                    <Link
+                                        href={route('classes.edit', classe.id)}
+                                        className="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    >
+                                        Modifier la classe
+                                    </Link>
+                                    <Link
+                                        href={route('classes.index')}
+                                        className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-800"
+                                    >
+                                        Changer de classe
+                                    </Link>
+                                </>
+                            )}
+
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -131,12 +208,36 @@ export default function Authenticated({
                     }
                 >
                     <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('classes.index')}
-                            active={route().current('classes.*')}
-                        >
-                            Mes classes
-                        </ResponsiveNavLink>
+                        {classe ? (
+                            <>
+                                <ResponsiveNavLink
+                                    href={route('classes.show', classe.id)}
+                                    active={
+                                        route().current('classes.show') ||
+                                        route().current('students.*')
+                                    }
+                                >
+                                    Élèves
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('classes.edit', classe.id)}
+                                >
+                                    Modifier la classe
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('classes.index')}
+                                >
+                                    Changer de classe
+                                </ResponsiveNavLink>
+                            </>
+                        ) : (
+                            <ResponsiveNavLink
+                                href={route('classes.index')}
+                                active={route().current('classes.*')}
+                            >
+                                Mes classes
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
