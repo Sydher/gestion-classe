@@ -9,7 +9,13 @@ import StudentFormFields, {
     StudentFormData,
 } from './Partials/StudentFormFields';
 
-export default function Edit({ student }: { student: Student }) {
+export default function Edit({
+    student,
+    classmates,
+}: {
+    student: Student;
+    classmates: Student[];
+}) {
     const classe = student.classe!;
 
     const { data, setData, put, processing, errors } =
@@ -18,6 +24,9 @@ export default function Edit({ student }: { student: Student }) {
             prenom: student.prenom,
             date_naissance: student.date_naissance.slice(0, 10),
             gaucher: student.gaucher,
+            probleme_vision: student.probleme_vision,
+            besoins_particuliers: student.besoins_particuliers ?? '',
+            separations: (student.separations ?? []).map((s) => s.id),
         });
 
     const deleteForm = useForm({});
@@ -59,6 +68,7 @@ export default function Edit({ student }: { student: Student }) {
                                 data={data}
                                 setData={setData}
                                 errors={errors}
+                                classmates={classmates}
                             />
 
                             <div className="flex items-center justify-between">

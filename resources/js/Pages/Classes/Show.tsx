@@ -67,7 +67,7 @@ export default function Show({
                                     Aucun élève ne correspond à la recherche.
                                 </Card>
                             ) : (
-                                <div className="space-y-2">
+                                <div className="space-y-3">
                                     {filteredStudents.map((student) => {
                                         const active =
                                             student.id === selectedStudent?.id;
@@ -82,13 +82,10 @@ export default function Show({
                                                 preserveState
                                                 preserveScroll
                                                 only={['selectedStudent']}
+                                                className="block"
                                             >
                                                 <Card
-                                                    className={`transition hover:shadow-md ${
-                                                        active
-                                                            ? 'ring-2'
-                                                            : ''
-                                                    }`}
+                                                    className="transition hover:shadow-md"
                                                     style={
                                                         active
                                                             ? {

@@ -24,9 +24,12 @@ export interface Student {
     prenom: string;
     date_naissance: string;
     gaucher: boolean;
+    probleme_vision: boolean;
+    besoins_particuliers: string | null;
     classe?: Classe;
     observations?: Observation[];
     communications?: Communication[];
+    separations?: Student[];
     created_at: string;
     updated_at: string;
 }

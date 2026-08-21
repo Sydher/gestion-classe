@@ -48,7 +48,7 @@ class ClasseController extends Controller
         $selectedStudent = null;
         if ($request->filled('student')) {
             $selectedStudent = $classe->students()
-                ->with(['observations', 'communications'])
+                ->with(['observations', 'communications', 'separations'])
                 ->find($request->integer('student'));
         }
 

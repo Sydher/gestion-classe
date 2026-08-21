@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateStudentRequest extends FormRequest
 {
@@ -21,6 +22,14 @@ class UpdateStudentRequest extends FormRequest
             'prenom' => ['required', 'string', 'max:255'],
             'date_naissance' => ['required', 'date', 'before:today'],
             'gaucher' => ['boolean'],
+            'probleme_vision' => ['boolean'],
+            'besoins_particuliers' => ['nullable', 'string'],
+            'separations' => ['array'],
+            'separations.*' => [
+                'integer',
+                Rule::exists('students', 'id')->where('class_id', $this->route('student')->class_id),
+                'not_in:'.$this->route('student')->id,
+            ],
         ];
     }
 }

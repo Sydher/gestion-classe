@@ -1,20 +1,29 @@
 import ClasseTheme from '@/Components/ClasseTheme';
 import ClassButton from '@/Components/ClassButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Classe } from '@/types';
+import { Classe, Student } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 import StudentFormFields, {
     StudentFormData,
 } from './Partials/StudentFormFields';
 
-export default function Create({ classe }: { classe: Classe }) {
+export default function Create({
+    classe,
+    classmates,
+}: {
+    classe: Classe;
+    classmates: Student[];
+}) {
     const { data, setData, post, processing, errors } =
         useForm<StudentFormData>({
             nom: '',
             prenom: '',
             date_naissance: '',
             gaucher: false,
+            probleme_vision: false,
+            besoins_particuliers: '',
+            separations: [],
         });
 
     const submit: FormEventHandler = (e) => {
@@ -44,6 +53,7 @@ export default function Create({ classe }: { classe: Classe }) {
                                 data={data}
                                 setData={setData}
                                 errors={errors}
+                                classmates={classmates}
                             />
 
                             <div className="flex justify-end">
