@@ -11,6 +11,8 @@ export interface Classe {
     nom: string;
     couleur_primaire: string;
     couleur_secondaire: string;
+    couleur_tertiaire: string;
+    couleur_texte: string;
     logo_path: string | null;
     logo_url: string | null;
     created_at: string;

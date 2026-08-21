@@ -21,6 +21,8 @@ class StoreClasseRequest extends FormRequest
             'nom' => ['required', 'string', 'max:255'],
             'couleur_primaire' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'couleur_secondaire' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'couleur_tertiaire' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'couleur_texte' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'logo' => ['nullable', 'image', 'max:2048'],
         ];
     }

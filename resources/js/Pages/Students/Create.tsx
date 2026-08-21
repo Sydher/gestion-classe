@@ -1,8 +1,10 @@
+import Card from '@/Components/Card';
 import ClasseTheme from '@/Components/ClasseTheme';
 import ClassButton from '@/Components/ClassButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Classe, Student } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
+import { Plus } from 'iconoir-react';
 import { FormEventHandler } from 'react';
 import StudentFormFields, {
     StudentFormData,
@@ -36,7 +38,7 @@ export default function Create({
             <AuthenticatedLayout
                 classe={classe}
                 header={
-                    <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                    <h2 className="text-xl font-semibold leading-tight text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)]">
                         Ajouter un élève — {classe.nom}
                     </h2>
                 }
@@ -45,10 +47,7 @@ export default function Create({
 
                 <div className="py-12">
                     <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-                        <form
-                            onSubmit={submit}
-                            className="space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
-                        >
+                        <Card as="form" onSubmit={submit} className="space-y-6">
                             <StudentFormFields
                                 data={data}
                                 setData={setData}
@@ -58,10 +57,11 @@ export default function Create({
 
                             <div className="flex justify-end">
                                 <ClassButton disabled={processing}>
+                                    <Plus className="h-4 w-4" />
                                     Ajouter l'élève
                                 </ClassButton>
                             </div>
-                        </form>
+                        </Card>
                     </div>
                 </div>
             </AuthenticatedLayout>

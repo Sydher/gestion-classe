@@ -7,6 +7,7 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import { Observation } from '@/types';
 import { router, useForm } from '@inertiajs/react';
+import { EditPencil, Plus, Trash } from 'iconoir-react';
 import { FormEventHandler, useState } from 'react';
 
 export default function ObservationsSection({
@@ -46,6 +47,7 @@ export default function ObservationsSection({
             {!showForm && (
                 <div className="flex justify-end">
                     <ClassButton onClick={() => setShowForm(true)}>
+                        <Plus className="h-4 w-4" />
                         Ajouter une observation
                     </ClassButton>
                 </div>
@@ -105,16 +107,17 @@ export default function ObservationsSection({
             )}
 
             {observations.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-[var(--color-muted,#6b7280)]">
                     Aucune observation pour le moment.
                 </p>
             ) : (
                 <div className="space-y-3">
-                    {observations.map((observation) => (
+                    {observations.map((observation, index) => (
                         <ObservationItem
                             key={observation.id}
                             observation={observation}
                             onDelete={destroy}
+                            index={index}
                         />
                     ))}
                 </div>
@@ -126,9 +129,11 @@ export default function ObservationsSection({
 function ObservationItem({
     observation,
     onDelete,
+    index,
 }: {
     observation: Observation;
     onDelete: (observation: Observation) => void;
+    index: number;
 }) {
     const [editing, setEditing] = useState(false);
     const { data, setData, put, processing, errors, reset } = useForm({
@@ -200,9 +205,12 @@ function ObservationItem({
     }
 
     return (
-        <Card className="space-y-1">
+        <Card
+            className="animate-fade-in space-y-1"
+            style={{ animationDelay: `${index * 40}ms` }}
+        >
             <div className="flex items-start justify-between gap-4">
-                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <span className="text-sm font-medium text-[var(--color-muted,#6b7280)]">
                     {new Date(observation.date).toLocaleDateString('fr-FR')} ·{' '}
                     {new Date(observation.created_at).toLocaleTimeString(
                         'fr-FR',
@@ -213,20 +221,22 @@ function ObservationItem({
                     <button
                         type="button"
                         onClick={() => setEditing(true)}
-                        className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        className="inline-flex items-center gap-1 text-xs text-[var(--color-muted,#6b7280)] hover:text-[var(--color-text,#374151)]"
                     >
+                        <EditPencil className="h-3.5 w-3.5" />
                         Modifier
                     </button>
                     <button
                         type="button"
                         onClick={() => onDelete(observation)}
-                        className="text-xs text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                     >
+                        <Trash className="h-3.5 w-3.5" />
                         Supprimer
                     </button>
                 </div>
             </div>
-            <p className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200">
+            <p className="whitespace-pre-wrap text-sm text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)]">
                 {observation.commentaire}
             </p>
         </Card>

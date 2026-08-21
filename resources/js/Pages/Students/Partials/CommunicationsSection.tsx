@@ -7,7 +7,17 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import { Communication, CommunicationType, COMMUNICATION_TYPES } from '@/types';
 import { router, useForm } from '@inertiajs/react';
-import { FormEventHandler, useState } from 'react';
+import {
+    Book,
+    EditPencil,
+    Group,
+    Mail,
+    MessageText,
+    Phone,
+    Plus,
+    Trash,
+} from 'iconoir-react';
+import { ComponentType, FormEventHandler, useState } from 'react';
 
 const TYPE_LABELS: Record<CommunicationType, string> = {
     telephone: 'Téléphone',
@@ -15,6 +25,14 @@ const TYPE_LABELS: Record<CommunicationType, string> = {
     rencontre: 'Rencontre',
     carnet: 'Mot dans le carnet',
     autre: 'Autre',
+};
+
+const TYPE_ICONS: Record<CommunicationType, ComponentType<{ className?: string }>> = {
+    telephone: Phone,
+    email: Mail,
+    rencontre: Group,
+    carnet: Book,
+    autre: MessageText,
 };
 
 export default function CommunicationsSection({
@@ -55,6 +73,7 @@ export default function CommunicationsSection({
             {!showForm && (
                 <div className="flex justify-end">
                     <ClassButton onClick={() => setShowForm(true)}>
+                        <Plus className="h-4 w-4" />
                         Ajouter une communication
                     </ClassButton>
                 </div>
@@ -91,7 +110,7 @@ export default function CommunicationsSection({
                                             e.target.value as CommunicationType,
                                         )
                                     }
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+                                    className="mt-1 block w-full rounded-md border-[var(--color-border,#d1d5db)] bg-[var(--color-tertiary,white)] text-[var(--color-text,#111827)] shadow-sm focus:border-[var(--color-primary,#6366f1)] focus:ring-[var(--color-primary,#6366f1)] dark:border-[var(--color-border,#374151)] dark:bg-[var(--color-tertiary,#111827)] dark:text-[var(--color-text,#d1d5db)]"
                                 >
                                     {COMMUNICATION_TYPES.map((type) => (
                                         <option key={type} value={type}>
@@ -140,16 +159,17 @@ export default function CommunicationsSection({
             )}
 
             {communications.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-[var(--color-muted,#6b7280)]">
                     Aucune communication enregistrée pour le moment.
                 </p>
             ) : (
                 <div className="space-y-3">
-                    {communications.map((communication) => (
+                    {communications.map((communication, index) => (
                         <CommunicationItem
                             key={communication.id}
                             communication={communication}
                             onDelete={destroy}
+                            index={index}
                         />
                     ))}
                 </div>
@@ -161,9 +181,11 @@ export default function CommunicationsSection({
 function CommunicationItem({
     communication,
     onDelete,
+    index,
 }: {
     communication: Communication;
     onDelete: (communication: Communication) => void;
+    index: number;
 }) {
     const [editing, setEditing] = useState(false);
     const { data, setData, put, processing, errors, reset } = useForm({
@@ -223,7 +245,7 @@ function CommunicationItem({
                                         e.target.value as CommunicationType,
                                     )
                                 }
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+                                className="mt-1 block w-full rounded-md border-[var(--color-border,#d1d5db)] bg-[var(--color-tertiary,white)] text-[var(--color-text,#111827)] shadow-sm focus:border-[var(--color-primary,#6366f1)] focus:ring-[var(--color-primary,#6366f1)] dark:border-[var(--color-border,#374151)] dark:bg-[var(--color-tertiary,#111827)] dark:text-[var(--color-text,#d1d5db)]"
                             >
                                 {COMMUNICATION_TYPES.map((type) => (
                                     <option key={type} value={type}>
@@ -269,13 +291,22 @@ function CommunicationItem({
         );
     }
 
+    const TypeIcon = TYPE_ICONS[communication.type];
+
     return (
-        <Card className="space-y-1">
+        <Card
+            className="animate-fade-in space-y-1"
+            style={{ animationDelay: `${index * 40}ms` }}
+        >
             <div className="flex items-start justify-between gap-4">
-                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <span className="flex items-center gap-1.5 text-sm font-medium text-[var(--color-muted,#6b7280)]">
                     {new Date(communication.date).toLocaleDateString('fr-FR')}{' '}
                     ·{' '}
-                    <span style={{ color: 'var(--color-primary)' }}>
+                    <span
+                        className="inline-flex items-center gap-1"
+                        style={{ color: 'var(--color-primary)' }}
+                    >
+                        <TypeIcon className="h-3.5 w-3.5" />
                         {TYPE_LABELS[communication.type]}
                     </span>
                 </span>
@@ -283,20 +314,22 @@ function CommunicationItem({
                     <button
                         type="button"
                         onClick={() => setEditing(true)}
-                        className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        className="inline-flex items-center gap-1 text-xs text-[var(--color-muted,#6b7280)] hover:text-[var(--color-text,#374151)]"
                     >
+                        <EditPencil className="h-3.5 w-3.5" />
                         Modifier
                     </button>
                     <button
                         type="button"
                         onClick={() => onDelete(communication)}
-                        className="text-xs text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                     >
+                        <Trash className="h-3.5 w-3.5" />
                         Supprimer
                     </button>
                 </div>
             </div>
-            <p className="whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200">
+            <p className="whitespace-pre-wrap text-sm text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)]">
                 {communication.resume}
             </p>
         </Card>

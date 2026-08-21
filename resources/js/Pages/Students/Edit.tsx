@@ -1,9 +1,11 @@
+import Card from '@/Components/Card';
 import ClasseTheme from '@/Components/ClasseTheme';
 import ClassButton from '@/Components/ClassButton';
 import DangerButton from '@/Components/DangerButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Student } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
+import { Trash } from 'iconoir-react';
 import { FormEventHandler } from 'react';
 import StudentFormFields, {
     StudentFormData,
@@ -51,7 +53,7 @@ export default function Edit({
             <AuthenticatedLayout
                 classe={classe}
                 header={
-                    <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                    <h2 className="text-xl font-semibold leading-tight text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)]">
                         Modifier {student.prenom} {student.nom}
                     </h2>
                 }
@@ -60,10 +62,7 @@ export default function Edit({
 
                 <div className="py-12">
                     <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-                        <form
-                            onSubmit={submit}
-                            className="space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
-                        >
+                        <Card as="form" onSubmit={submit} className="space-y-6">
                             <StudentFormFields
                                 data={data}
                                 setData={setData}
@@ -77,13 +76,14 @@ export default function Edit({
                                     onClick={destroy}
                                     disabled={deleteForm.processing}
                                 >
+                                    <Trash className="h-4 w-4" />
                                     Supprimer
                                 </DangerButton>
                                 <ClassButton disabled={processing}>
                                     Enregistrer
                                 </ClassButton>
                             </div>
-                        </form>
+                        </Card>
                     </div>
                 </div>
             </AuthenticatedLayout>

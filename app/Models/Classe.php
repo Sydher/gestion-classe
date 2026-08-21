@@ -19,6 +19,8 @@ class Classe extends Model
         'nom',
         'couleur_primaire',
         'couleur_secondaire',
+        'couleur_tertiaire',
+        'couleur_texte',
         'logo_path',
     ];
 

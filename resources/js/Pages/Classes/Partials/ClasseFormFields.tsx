@@ -2,12 +2,15 @@ import ColorField from '@/Components/ColorField';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
+import { THEME_PRESETS } from '@/themePresets';
 import { useState } from 'react';
 
 export type ClasseFormData = {
     nom: string;
     couleur_primaire: string;
     couleur_secondaire: string;
+    couleur_tertiaire: string;
+    couleur_texte: string;
     logo: File | null;
 };
 
@@ -41,6 +44,72 @@ export default function ClasseFormFields({
                 <InputError message={errors.nom} className="mt-2" />
             </div>
 
+            <div>
+                <InputLabel value="Thèmes suggérés" />
+                <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {THEME_PRESETS.map((preset) => {
+                        const active =
+                            data.couleur_primaire ===
+                                preset.couleur_primaire &&
+                            data.couleur_secondaire ===
+                                preset.couleur_secondaire &&
+                            data.couleur_tertiaire ===
+                                preset.couleur_tertiaire &&
+                            data.couleur_texte === preset.couleur_texte;
+
+                        return (
+                            <button
+                                key={preset.nom}
+                                type="button"
+                                onClick={() => {
+                                    setData(
+                                        'couleur_primaire',
+                                        preset.couleur_primaire,
+                                    );
+                                    setData(
+                                        'couleur_secondaire',
+                                        preset.couleur_secondaire,
+                                    );
+                                    setData(
+                                        'couleur_tertiaire',
+                                        preset.couleur_tertiaire,
+                                    );
+                                    setData(
+                                        'couleur_texte',
+                                        preset.couleur_texte,
+                                    );
+                                }}
+                                className={`flex items-center gap-3 rounded-lg border p-3 text-left transition ${
+                                    active
+                                        ? 'ring-2 ring-offset-2'
+                                        : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+                                }`}
+                                style={
+                                    active
+                                        ? {
+                                              borderColor:
+                                                  preset.couleur_primaire,
+                                              ['--tw-ring-color' as string]:
+                                                  preset.couleur_primaire,
+                                          }
+                                        : undefined
+                                }
+                            >
+                                <span
+                                    className="flex h-8 w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-black/5"
+                                    style={{
+                                        background: `linear-gradient(135deg, ${preset.couleur_primaire} 50%, ${preset.couleur_secondaire} 50%)`,
+                                    }}
+                                />
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {preset.nom}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
                 <ColorField
                     id="couleur_primaire"
@@ -56,7 +125,26 @@ export default function ClasseFormFields({
                     onChange={(value) => setData('couleur_secondaire', value)}
                     error={errors.couleur_secondaire}
                 />
+                <ColorField
+                    id="couleur_tertiaire"
+                    label="Couleur tertiaire"
+                    value={data.couleur_tertiaire}
+                    onChange={(value) => setData('couleur_tertiaire', value)}
+                    error={errors.couleur_tertiaire}
+                />
+                <ColorField
+                    id="couleur_texte"
+                    label="Couleur du texte"
+                    value={data.couleur_texte}
+                    onChange={(value) => setData('couleur_texte', value)}
+                    error={errors.couleur_texte}
+                />
             </div>
+            <p className="-mt-3 text-xs text-gray-500 dark:text-gray-400">
+                Principale : boutons et éléments forts · Secondaire :
+                encadrés · Tertiaire : fond de la page · Texte : texte,
+                contours et contrastes.
+            </p>
 
             <div>
                 <InputLabel htmlFor="logo" value="Logo (optionnel)" />

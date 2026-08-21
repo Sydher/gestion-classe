@@ -4,6 +4,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Classe } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
+import { EditPencil, Menu, NavArrowDown, NavArrowLeft, Xmark } from 'iconoir-react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
 export default function Authenticated({
@@ -17,8 +18,8 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
+        <div className="min-h-screen bg-[var(--color-tertiary,#f3f4f6)] dark:bg-[var(--color-tertiary,#111827)]">
+            <nav className="border-b border-[var(--color-border,#e5e7eb)] bg-[var(--color-secondary,white)] dark:border-[var(--color-border,#374151)] dark:bg-[var(--color-secondary,#1f2937)]">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex items-center">
@@ -47,7 +48,7 @@ export default function Authenticated({
                                                     .toUpperCase()
                                             )}
                                         </div>
-                                        <span className="hidden font-semibold text-gray-800 dark:text-gray-200 sm:block">
+                                        <span className="hidden font-semibold text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)] sm:block">
                                             {classe.nom}
                                         </span>
                                     </Link>
@@ -101,14 +102,16 @@ export default function Authenticated({
                                 <>
                                     <Link
                                         href={route('classes.edit', classe.id)}
-                                        className="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                        className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-muted,#6b7280)] transition hover:text-[var(--color-text,#374151)] dark:hover:text-[var(--color-text,#e5e7eb)]"
                                     >
+                                        <EditPencil className="h-4 w-4" />
                                         Modifier la classe
                                     </Link>
                                     <Link
                                         href={route('classes.index')}
-                                        className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-800"
+                                        className="inline-flex items-center gap-1.5 rounded-md border border-[var(--color-border,#d1d5db)] px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-text,#374151)] shadow-sm transition hover:bg-[var(--color-hover,#111827)] dark:text-[var(--color-text,#d1d5db)]"
                                     >
+                                        <NavArrowLeft className="h-3.5 w-3.5" />
                                         Changer de classe
                                     </Link>
                                 </>
@@ -120,22 +123,10 @@ export default function Authenticated({
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                                className="inline-flex items-center rounded-md border border-transparent bg-transparent px-3 py-2 text-sm font-medium leading-4 text-[var(--color-text,#6b7280)] transition duration-150 ease-in-out hover:text-[var(--color-text,#374151)] focus:outline-none dark:text-[var(--color-text,#9ca3af)] dark:hover:text-[var(--color-text,#d1d5db)]"
                                             >
                                                 {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
+                                                <NavArrowDown className="-me-0.5 ms-2 h-4 w-4" />
                                             </button>
                                         </span>
                                     </Dropdown.Trigger>
@@ -165,37 +156,13 @@ export default function Authenticated({
                                         (previousState) => !previousState,
                                     )
                                 }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
+                                className="inline-flex items-center justify-center rounded-md p-2 text-[var(--color-text,#9ca3af)] transition duration-150 ease-in-out hover:bg-[var(--color-hover,#111827)] hover:text-[var(--color-text,#6b7280)] focus:bg-[var(--color-hover,#111827)] focus:text-[var(--color-text,#6b7280)] focus:outline-none"
                             >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
+                                {showingNavigationDropdown ? (
+                                    <Xmark className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
                             </button>
                         </div>
                     </div>
@@ -240,12 +207,12 @@ export default function Authenticated({
                         )}
                     </div>
 
-                    <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
+                    <div className="border-t border-[var(--color-border,#e5e7eb)] pb-1 pt-4 dark:border-[var(--color-border,#374151)]">
                         <div className="px-4">
-                            <div className="text-base font-medium text-gray-800 dark:text-gray-200">
+                            <div className="text-base font-medium text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)]">
                                 {user.name}
                             </div>
-                            <div className="text-sm font-medium text-gray-500">
+                            <div className="text-sm font-medium text-[var(--color-muted,#6b7280)]">
                                 {user.email}
                             </div>
                         </div>
@@ -267,14 +234,16 @@ export default function Authenticated({
             </nav>
 
             {header && (
-                <header className="bg-white shadow dark:bg-gray-800">
+                <header className="bg-[var(--color-secondary,white)] shadow dark:bg-[var(--color-secondary,#1f2937)]">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         {header}
                     </div>
                 </header>
             )}
 
-            <main>{children}</main>
+            <main key={classe?.id ?? 'sober'} className="animate-fade-in">
+                {children}
+            </main>
         </div>
     );
 }

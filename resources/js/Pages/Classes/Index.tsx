@@ -1,8 +1,8 @@
 import Card from '@/Components/Card';
-import ClasseTheme from '@/Components/ClasseTheme';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Classe } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+import { Plus } from 'iconoir-react';
 
 export default function Index({ classes }: { classes: Classe[] }) {
     return (
@@ -20,8 +20,9 @@ export default function Index({ classes }: { classes: Classe[] }) {
                     <div className="flex justify-end">
                         <Link
                             href={route('classes.create')}
-                            className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-white"
+                            className="inline-flex items-center gap-2 rounded-md border border-transparent bg-gray-800 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-white"
                         >
+                            <Plus className="h-4 w-4" />
                             Nouvelle classe
                         </Link>
                     </div>
@@ -33,44 +34,49 @@ export default function Index({ classes }: { classes: Classe[] }) {
                         </Card>
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {classes.map((classe) => (
-                                <ClasseTheme key={classe.id} classe={classe}>
-                                    <Link href={route('classes.show', classe.id)}>
-                                        <Card className="flex h-full items-center gap-4 transition hover:shadow-md">
+                            {classes.map((classe, index) => (
+                                <Link
+                                    key={classe.id}
+                                    href={route('classes.show', classe.id)}
+                                    className="animate-fade-in"
+                                    style={{
+                                        animationDelay: `${index * 60}ms`,
+                                    }}
+                                >
+                                    <Card className="flex h-full items-center gap-4 transition hover:shadow-md">
+                                        <div
+                                            className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full text-lg font-semibold text-white"
+                                            style={{
+                                                backgroundColor:
+                                                    classe.couleur_primaire,
+                                            }}
+                                        >
+                                            {classe.logo_url ? (
+                                                <img
+                                                    src={classe.logo_url}
+                                                    alt=""
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            ) : (
+                                                classe.nom
+                                                    .charAt(0)
+                                                    .toUpperCase()
+                                            )}
+                                        </div>
+                                        <div>
+                                            <div className="font-semibold text-gray-900 dark:text-gray-100">
+                                                {classe.nom}
+                                            </div>
                                             <div
-                                                className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full text-lg font-semibold text-white"
+                                                className="mt-1 h-1.5 w-16 rounded-full"
                                                 style={{
                                                     backgroundColor:
-                                                        'var(--color-primary)',
+                                                        classe.couleur_secondaire,
                                                 }}
-                                            >
-                                                {classe.logo_url ? (
-                                                    <img
-                                                        src={classe.logo_url}
-                                                        alt=""
-                                                        className="h-full w-full object-cover"
-                                                    />
-                                                ) : (
-                                                    classe.nom
-                                                        .charAt(0)
-                                                        .toUpperCase()
-                                                )}
-                                            </div>
-                                            <div>
-                                                <div className="font-semibold text-gray-900 dark:text-gray-100">
-                                                    {classe.nom}
-                                                </div>
-                                                <div
-                                                    className="mt-1 h-1.5 w-16 rounded-full"
-                                                    style={{
-                                                        backgroundColor:
-                                                            'var(--color-secondary)',
-                                                    }}
-                                                />
-                                            </div>
-                                        </Card>
-                                    </Link>
-                                </ClasseTheme>
+                                            />
+                                        </div>
+                                    </Card>
+                                </Link>
                             ))}
                         </div>
                     )}

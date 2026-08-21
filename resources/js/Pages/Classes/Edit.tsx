@@ -1,7 +1,8 @@
+import Card from '@/Components/Card';
+import ClassButton from '@/Components/ClassButton';
 import ClasseTheme from '@/Components/ClasseTheme';
 import DangerButton from '@/Components/DangerButton';
 import Modal from '@/Components/Modal';
-import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Classe } from '@/types';
@@ -17,6 +18,8 @@ export default function Edit({ classe }: { classe: Classe }) {
             nom: classe.nom,
             couleur_primaire: classe.couleur_primaire,
             couleur_secondaire: classe.couleur_secondaire,
+            couleur_tertiaire: classe.couleur_tertiaire,
+            couleur_texte: classe.couleur_texte,
             logo: null,
         });
 
@@ -38,7 +41,7 @@ export default function Edit({ classe }: { classe: Classe }) {
             <AuthenticatedLayout
                 classe={classe}
                 header={
-                    <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                    <h2 className="text-xl font-semibold leading-tight text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)]">
                         Modifier la classe
                     </h2>
                 }
@@ -47,10 +50,7 @@ export default function Edit({ classe }: { classe: Classe }) {
 
                 <div className="space-y-6 py-12">
                     <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-                        <form
-                            onSubmit={submit}
-                            className="space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
-                        >
+                        <Card as="form" onSubmit={submit} className="space-y-6">
                             <ClasseFormFields
                                 data={data}
                                 setData={setData}
@@ -59,19 +59,19 @@ export default function Edit({ classe }: { classe: Classe }) {
                             />
 
                             <div className="flex justify-end">
-                                <PrimaryButton disabled={processing}>
+                                <ClassButton disabled={processing}>
                                     Enregistrer
-                                </PrimaryButton>
+                                </ClassButton>
                             </div>
-                        </form>
+                        </Card>
                     </div>
 
                     <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-                        <div className="rounded-xl border border-red-200 bg-white p-6 shadow-sm dark:border-red-900/50 dark:bg-gray-800">
+                        <div className="rounded-xl border border-red-300/50 bg-red-50/60 p-6 shadow-sm dark:border-red-900/50 dark:bg-red-950/20">
                             <h3 className="text-sm font-semibold text-red-700 dark:text-red-400">
                                 Supprimer la classe
                             </h3>
-                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            <p className="mt-1 text-sm text-[var(--color-muted,#6b7280)]">
                                 Cette action supprime définitivement la
                                 classe, ses élèves, observations et
                                 communications.
@@ -91,10 +91,10 @@ export default function Edit({ classe }: { classe: Classe }) {
                     onClose={() => setConfirmingDeletion(false)}
                 >
                     <form onSubmit={destroy} className="p-6">
-                        <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        <h2 className="text-lg font-medium text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                             Supprimer {classe.nom} ?
                         </h2>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        <p className="mt-1 text-sm text-[var(--color-muted,#6b7280)]">
                             Cette action est irréversible.
                         </p>
                         <div className="mt-6 flex justify-end gap-3">

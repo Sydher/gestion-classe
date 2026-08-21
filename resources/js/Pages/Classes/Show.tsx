@@ -5,6 +5,7 @@ import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Classe, Student } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+import { Plus, Search } from 'iconoir-react';
 import { useMemo, useState } from 'react';
 import StudentFiche from '../Students/Partials/StudentFiche';
 
@@ -39,36 +40,44 @@ export default function Show({
                     <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:px-8">
                         <div className="space-y-4 lg:w-1/3">
                             <div className="flex items-center justify-between gap-4">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                <h3 className="text-lg font-semibold text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                                     Élèves ({students.length})
                                 </h3>
                                 <Link
                                     href={route('students.create', classe.id)}
                                 >
-                                    <ClassButton>Ajouter</ClassButton>
+                                    <ClassButton>
+                                        <Plus className="h-4 w-4" />
+                                        Ajouter
+                                    </ClassButton>
                                 </Link>
                             </div>
 
-                            <TextInput
-                                type="search"
-                                placeholder="Rechercher un élève..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="block w-full"
-                            />
+                            <div className="relative">
+                                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted,#9ca3af)]" />
+                                <TextInput
+                                    type="search"
+                                    placeholder="Rechercher un élève..."
+                                    value={search}
+                                    onChange={(e) =>
+                                        setSearch(e.target.value)
+                                    }
+                                    className="block w-full pl-9"
+                                />
+                            </div>
 
                             {students.length === 0 ? (
-                                <Card className="text-center text-gray-500 dark:text-gray-400">
+                                <Card className="text-center text-[var(--color-muted,#6b7280)]">
                                     Aucun élève dans cette classe pour
                                     l'instant.
                                 </Card>
                             ) : filteredStudents.length === 0 ? (
-                                <Card className="text-center text-gray-500 dark:text-gray-400">
+                                <Card className="text-center text-[var(--color-muted,#6b7280)]">
                                     Aucun élève ne correspond à la recherche.
                                 </Card>
                             ) : (
                                 <div className="space-y-3">
-                                    {filteredStudents.map((student) => {
+                                    {filteredStudents.map((student, index) => {
                                         const active =
                                             student.id === selectedStudent?.id;
 
@@ -85,23 +94,24 @@ export default function Show({
                                                 className="block"
                                             >
                                                 <Card
-                                                    className="transition hover:shadow-md"
-                                                    style={
-                                                        active
+                                                    className="animate-fade-in transition hover:shadow-md"
+                                                    style={{
+                                                        animationDelay: `${index * 40}ms`,
+                                                        ...(active
                                                             ? {
                                                                   borderColor:
                                                                       'var(--color-primary)',
                                                                   boxShadow:
                                                                       '0 0 0 2px var(--color-primary)',
                                                               }
-                                                            : undefined
-                                                    }
+                                                            : undefined),
+                                                    }}
                                                 >
-                                                    <div className="font-semibold text-gray-900 dark:text-gray-100">
+                                                    <div className="font-semibold text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                                                         {student.prenom}{' '}
                                                         {student.nom}
                                                     </div>
-                                                    <div className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                                    <div className="mt-1 text-sm text-[var(--color-muted,#6b7280)]">
                                                         Né(e) le{' '}
                                                         {new Date(
                                                             student.date_naissance,
@@ -121,9 +131,12 @@ export default function Show({
 
                         <div className="lg:w-2/3">
                             {selectedStudent ? (
-                                <StudentFiche student={selectedStudent} />
+                                <StudentFiche
+                                    key={selectedStudent.id}
+                                    student={selectedStudent}
+                                />
                             ) : (
-                                <Card className="text-center text-gray-500 dark:text-gray-400">
+                                <Card className="text-center text-[var(--color-muted,#6b7280)]">
                                     Sélectionnez un élève pour afficher sa
                                     fiche.
                                 </Card>

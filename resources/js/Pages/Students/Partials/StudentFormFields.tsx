@@ -84,7 +84,7 @@ export default function StudentFormFields({
                         checked={data.gaucher}
                         onChange={(e) => setData('gaucher', e.target.checked)}
                     />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <span className="text-sm text-[var(--color-text,#374151)] dark:text-[var(--color-text,#d1d5db)]">
                         Gaucher
                     </span>
                 </label>
@@ -96,7 +96,7 @@ export default function StudentFormFields({
                             setData('probleme_vision', e.target.checked)
                         }
                     />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <span className="text-sm text-[var(--color-text,#374151)] dark:text-[var(--color-text,#d1d5db)]">
                         Problème de vision
                     </span>
                 </label>
@@ -125,11 +125,11 @@ export default function StudentFormFields({
             <div>
                 <InputLabel value="À séparer de" />
                 {classmates.length === 0 ? (
-                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    <p className="mt-1 text-sm text-[var(--color-muted,#6b7280)]">
                         Aucun autre élève dans la classe pour l'instant.
                     </p>
                 ) : (
-                    <div className="mt-1 grid max-h-48 grid-cols-2 gap-2 overflow-y-auto rounded-md border border-gray-300 p-3 dark:border-gray-700">
+                    <div className="mt-1 grid max-h-48 grid-cols-2 gap-2 overflow-y-auto rounded-md border border-[var(--color-border,#d1d5db)] p-3">
                         {classmates.map((classmate) => (
                             <label
                                 key={classmate.id}
@@ -146,7 +146,7 @@ export default function StudentFormFields({
                                         )
                                     }
                                 />
-                                <span className="text-sm text-gray-700 dark:text-gray-300">
+                                <span className="text-sm text-[var(--color-text,#374151)] dark:text-[var(--color-text,#d1d5db)]">
                                     {classmate.prenom} {classmate.nom}
                                 </span>
                             </label>

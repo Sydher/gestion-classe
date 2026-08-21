@@ -1,6 +1,15 @@
 import Card from '@/Components/Card';
 import { Student } from '@/types';
 import { Link } from '@inertiajs/react';
+import {
+    Book,
+    Calendar,
+    EditPencil,
+    Eye,
+    EyeClosed,
+    Group,
+    MessageText,
+} from 'iconoir-react';
 import { useState } from 'react';
 import CommunicationsSection from './CommunicationsSection';
 import ObservationsSection from './ObservationsSection';
@@ -11,51 +20,58 @@ export default function StudentFiche({ student }: { student: Student }) {
     const [tab, setTab] = useState<Tab>('observations');
 
     return (
-        <Card className="space-y-6">
+        <Card className="animate-fade-in-scale space-y-6">
             <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h3 className="text-xl font-semibold leading-tight text-[var(--color-text,#1f2937)] dark:text-[var(--color-text,#e5e7eb)]">
                     {student.prenom} {student.nom}
                 </h3>
                 <Link
                     href={route('students.edit', student.id)}
-                    className="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-muted,#6b7280)] transition hover:text-[var(--color-text,#374151)]"
                 >
+                    <EditPencil className="h-4 w-4" />
                     Modifier
                 </Link>
             </div>
 
-            <dl className="grid grid-cols-2 gap-4 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+            <dl className="grid grid-cols-2 gap-4 rounded-xl border border-[var(--color-border,#e5e7eb)] p-4 dark:border-[var(--color-border,#374151)]">
                 <div>
-                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <dt className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-[var(--color-muted,#6b7280)]">
+                        <Calendar className="h-3.5 w-3.5" />
                         Date de naissance
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                    <dd className="mt-1 text-sm text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                         {new Date(student.date_naissance).toLocaleDateString(
                             'fr-FR',
                         )}
                     </dd>
                 </div>
                 <div>
-                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <dt className="text-xs font-medium uppercase tracking-wide text-[var(--color-muted,#6b7280)]">
                         Latéralité
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                    <dd className="mt-1 text-sm text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                         {student.gaucher ? 'Gaucher' : 'Droitier'}
                     </dd>
                 </div>
                 <div>
-                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <dt className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-[var(--color-muted,#6b7280)]">
+                        {student.probleme_vision ? (
+                            <EyeClosed className="h-3.5 w-3.5" />
+                        ) : (
+                            <Eye className="h-3.5 w-3.5" />
+                        )}
                         Problème de vision
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                    <dd className="mt-1 text-sm text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                         {student.probleme_vision ? 'Oui' : 'Non'}
                     </dd>
                 </div>
                 <div>
-                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                        À séparer de
+                    <dt className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-[var(--color-muted,#6b7280)]">
+                        <Group className="h-3.5 w-3.5" />À séparer de
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                    <dd className="mt-1 text-sm text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                         {student.separations && student.separations.length > 0
                             ? student.separations
                                   .map((s) => `${s.prenom} ${s.nom}`)
@@ -65,10 +81,10 @@ export default function StudentFiche({ student }: { student: Student }) {
                 </div>
                 {student.besoins_particuliers && (
                     <div className="col-span-2">
-                        <dt className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        <dt className="text-xs font-medium uppercase tracking-wide text-[var(--color-muted,#6b7280)]">
                             Besoins particuliers
                         </dt>
-                        <dd className="mt-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-gray-100">
+                        <dd className="mt-1 whitespace-pre-wrap text-sm text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]">
                             {student.besoins_particuliers}
                         </dd>
                     </div>
@@ -76,14 +92,14 @@ export default function StudentFiche({ student }: { student: Student }) {
             </dl>
 
             <div>
-                <div className="flex gap-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex gap-4 border-b border-[var(--color-border,#e5e7eb)] dark:border-[var(--color-border,#374151)]">
                     <button
                         type="button"
                         onClick={() => setTab('observations')}
-                        className={`border-b-2 px-1 pb-2 text-sm font-medium transition ${
+                        className={`flex items-center gap-1.5 border-b-2 px-1 pb-2 text-sm font-medium transition ${
                             tab === 'observations'
-                                ? 'text-gray-900 dark:text-gray-100'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                                ? 'text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]'
+                                : 'border-transparent text-[var(--color-muted,#6b7280)] hover:text-[var(--color-text,#374151)]'
                         }`}
                         style={
                             tab === 'observations'
@@ -91,15 +107,16 @@ export default function StudentFiche({ student }: { student: Student }) {
                                 : undefined
                         }
                     >
+                        <Book className="h-4 w-4" />
                         Observations
                     </button>
                     <button
                         type="button"
                         onClick={() => setTab('communications')}
-                        className={`border-b-2 px-1 pb-2 text-sm font-medium transition ${
+                        className={`flex items-center gap-1.5 border-b-2 px-1 pb-2 text-sm font-medium transition ${
                             tab === 'communications'
-                                ? 'text-gray-900 dark:text-gray-100'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                                ? 'text-[var(--color-text,#111827)] dark:text-[var(--color-text,#f3f4f6)]'
+                                : 'border-transparent text-[var(--color-muted,#6b7280)] hover:text-[var(--color-text,#374151)]'
                         }`}
                         style={
                             tab === 'communications'
@@ -107,11 +124,12 @@ export default function StudentFiche({ student }: { student: Student }) {
                                 : undefined
                         }
                     >
+                        <MessageText className="h-4 w-4" />
                         Communications avec la famille
                     </button>
                 </div>
 
-                <div className="pt-4">
+                <div className="animate-fade-in pt-4" key={tab}>
                     {tab === 'observations' ? (
                         <ObservationsSection
                             studentId={student.id}
