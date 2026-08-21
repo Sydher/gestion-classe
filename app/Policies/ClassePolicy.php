@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Classe;
+use App\Models\User;
+
+class ClassePolicy
+{
+    public function viewAny(User $user): bool
+    {
+        return true;
+    }
+
+    public function view(User $user, Classe $classe): bool
+    {
+        return $user->id === $classe->user_id;
+    }
+
+    public function create(User $user): bool
+    {
+        return true;
+    }
+
+    public function update(User $user, Classe $classe): bool
+    {
+        return $user->id === $classe->user_id;
+    }
+
+    public function delete(User $user, Classe $classe): bool
+    {
+        return $user->id === $classe->user_id;
+    }
+}
