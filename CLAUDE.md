@@ -31,10 +31,21 @@ php artisan test
 php artisan test --filter=ClasseTest      # single test file/name
 php artisan test tests/Feature/ProfileTest.php
 
+# E2E tests (Laravel Dusk, real Chrome via ChromeDriver)
+composer run dusk         # builds assets, runs tests/Browser against a dedicated DB (database/testing.sqlite)
+
 # PHP code style (Laravel Pint, no custom config — defaults)
 vendor/bin/pint
 vendor/bin/pint --test   # check only, no changes
 ```
+
+## Workflow
+
+- **Langue** : répondre en français (termes techniques inchangés : fichiers, code, commandes, mots-clés Laravel/React...).
+- **Tests** : pour tout code touché dans `app/`, vérifier s'il est éligible à un TU/test feature — si oui, créer/compléter/corriger le test pour couvrir toutes ses branches, une par cas, format given/when/then (conventions existantes : `tests/Unit/Policies`, `tests/Feature/*Test.php`). Une fois le développement fait, lancer les tests au moins sur le périmètre concerné (`php artisan test --filter=...`) avant de considérer la tâche terminée.
+- **E2E (`tests/Browser/*Test.php`, Dusk)** : couvrent les parcours utilisateur bout-en-bout dans un vrai navigateur (golden path create/update/delete par ressource) — pas les cas de validation ou d'autorisation, déjà couverts par les tests Feature/Unit. Champs sans `name` HTML (formulaires custom de l'app) nécessitent un sélecteur `#id` explicite avec Dusk (`->type('#nom', ...)`, pas `->type('nom', ...)`). Boutons `PrimaryButton`/`DangerButton`/`SecondaryButton` rendent leur texte en majuscules via CSS (`uppercase`) — Dusk matche le texte réellement affiché, donc `->press('SUPPRIMER')`, pas `->press('Supprimer')`.
+- **Tenir les tests E2E à jour** : pour tout développement qui ajoute, modifie ou supprime un parcours utilisateur (nouvelle page, nouveau champ de formulaire, nouveau bouton d'action, changement de flux de navigation...), créer/compléter/corriger le test Dusk correspondant dans `tests/Browser/` en suivant les conventions existantes du fichier concerné.
+- **Relancer les E2E avant de terminer** : une fois le développement fait (surtout pour tout ce qui touche à l'UI/aux flux Inertia), lancer `composer run dusk` et vérifier que la suite passe entièrement avant de considérer la tâche terminée — ne pas se contenter des tests Feature/Unit pour du code qui touche au parcours utilisateur réel.
 
 ## Architecture
 
