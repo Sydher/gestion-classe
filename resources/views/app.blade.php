@@ -3,6 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{-- Outil interne : jamais indexé, ni par les moteurs de recherche ni par les crawlers IA. --}}
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 

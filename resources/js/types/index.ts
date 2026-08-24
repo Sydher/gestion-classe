@@ -71,4 +71,5 @@ export type PageProps<
     auth: {
         user: User;
     };
+    registrationEnabled: boolean;
 };

@@ -31,6 +31,22 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
+test('a filled honeypot field blocks authentication even with valid credentials', function () {
+    // Given a valid user and a bot filling the hidden honeypot field
+    $user = User::factory()->create();
+
+    // When submitting the login form with the honeypot filled
+    $response = $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+        'website' => 'https://spam.example.com',
+    ]);
+
+    // Then authentication is rejected as if the credentials were invalid
+    $this->assertGuest();
+    $response->assertSessionHasErrors('email');
+});
+
 test('users can logout', function () {
     $user = User::factory()->create();
 

@@ -42,6 +42,17 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Piège à bots : champ invisible pour un humain. S'il est rempli, on traite
+        // la requête comme un échec d'authentification classique (même message,
+        // même comptabilisation dans le rate limiter) sans révéler la détection.
+        if (filled($this->input('website'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 

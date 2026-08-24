@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\AppSetting;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +22,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
+        abort_unless(AppSetting::registrationEnabled(), 404);
+
         return Inertia::render('Auth/Register');
     }
 
@@ -31,6 +34,8 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        abort_unless(AppSetting::registrationEnabled(), 404);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,

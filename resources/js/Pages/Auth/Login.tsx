@@ -4,7 +4,8 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { PageProps } from '@/types';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
 export default function Login({
@@ -14,10 +15,14 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
+    const { registrationEnabled } = usePage<PageProps>().props;
+
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
         remember: false as boolean,
+        // Piège à bots : ce champ reste toujours vide pour un humain, voir LoginRequest::authenticate().
+        website: '',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -39,6 +44,23 @@ export default function Login({
             )}
 
             <form onSubmit={submit}>
+                {/* Piège à bots (honeypot) : caché visuellement, un humain ne le remplit jamais. */}
+                <div
+                    className="absolute left-[-9999px] top-auto"
+                    aria-hidden="true"
+                >
+                    <label htmlFor="website">Ne pas remplir ce champ</label>
+                    <input
+                        type="text"
+                        id="website"
+                        name="website"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={data.website}
+                        onChange={(e) => setData('website', e.target.value)}
+                    />
+                </div>
+
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -105,15 +127,17 @@ export default function Login({
                     </PrimaryButton>
                 </div>
 
-                <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-                    Pas encore de compte ?{' '}
-                    <Link
-                        href={route('register')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                    >
-                        Créer un compte
-                    </Link>
-                </div>
+                {registrationEnabled && (
+                    <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                        Pas encore de compte ?{' '}
+                        <Link
+                            href={route('register')}
+                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                        >
+                            Créer un compte
+                        </Link>
+                    </div>
+                )}
             </form>
         </GuestLayout>
     );
