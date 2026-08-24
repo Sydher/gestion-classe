@@ -26,6 +26,20 @@ test('un visiteur peut créer un compte et accéder à ses classes', function ()
     expect(User::where('email', 'alice@example.com')->exists())->toBeTrue();
 });
 
+test('un visiteur peut accéder à l\'inscription depuis la page de connexion', function () {
+    // Given la page de connexion
+
+    // When il clique sur le lien vers l'inscription
+    $this->browse(function (Browser $browser) {
+        $browser->visit('/login')
+            ->waitForText('Créer un compte')
+            ->clickLink('Créer un compte')
+            ->waitForLocation('/register')
+            // Then il est redirigé vers le formulaire d'inscription
+            ->assertPathIs('/register');
+    });
+});
+
 test('un utilisateur peut se connecter avec ses identifiants', function () {
     // Given un utilisateur existant
     $user = User::factory()->create();
@@ -56,8 +70,8 @@ test('un utilisateur connecté peut se déconnecter', function () {
             ->waitForText('Mes classes')
             // When il se déconnecte depuis le menu utilisateur
             ->press($user->name)
-            ->waitForText('Log Out')
-            ->press('Log Out')
+            ->waitForText('Déconnexion')
+            ->press('Déconnexion')
             ->waitForLocation('/login')
             // Then il est déconnecté et redirigé vers la connexion
             ->assertPathIs('/login')

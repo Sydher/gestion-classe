@@ -52,6 +52,43 @@ test('un utilisateur peut modifier un élève', function () {
     expect($student->fresh()->prenom)->toBe('Léna');
 });
 
+test('un utilisateur peut exporter la fiche d\'un élève', function () {
+    // Given un élève avec une observation et une communication enregistrées
+    $classe = Classe::factory()->create();
+    $student = Student::factory()->for($classe, 'classe')->create([
+        'prenom' => 'Léa',
+        'nom' => 'Martin',
+    ]);
+    $student->observations()->create([
+        'date' => '2024-09-10',
+        'commentaire' => 'Très bonne participation en classe.',
+    ]);
+    $student->communications()->create([
+        'date' => '2024-09-12',
+        'type' => 'telephone',
+        'resume' => 'Appel avec les parents au sujet des devoirs.',
+    ]);
+
+    $this->browse(function (Browser $browser) use ($student) {
+        // When il ouvre l'export de la fiche élève
+        $browser->loginAs($student->classe->user)
+            ->visit("/classes/{$student->class_id}?student={$student->id}")
+            ->waitForText('Léa Martin')
+            ->press('Exporter')
+            ->waitForText('Export — Léa Martin');
+
+        // Then le contenu généré contient les informations, observations et communications de l'élève
+        $content = $browser->value('#export-content');
+        expect($content)->toContain('FICHE ÉLÈVE — Léa Martin');
+        expect($content)->toContain('Très bonne participation en classe.');
+        expect($content)->toContain('Appel avec les parents au sujet des devoirs.');
+
+        // SecondaryButton renders its label uppercase via CSS, which Dusk's button-text match respects
+        $browser->press('FERMER')
+            ->waitUntilMissingText('Export — Léa Martin');
+    });
+});
+
 test('un utilisateur peut supprimer un élève', function () {
     // Given un élève existant
     $classe = Classe::factory()->create();
